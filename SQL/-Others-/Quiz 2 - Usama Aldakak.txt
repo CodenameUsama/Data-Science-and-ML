@@ -1,0 +1,88 @@
+Quiz 2 - Usama Aldakak
+
+Q1. 
+
+a. 
+
+SELECT e.last_name, c.country_name
+FROM employees e, countries c, locations l, departments d
+WHERE c.Country_ID = l.Country_id AND d.location_id = l.location_id AND e.department_id = d.department_id;
+
+b.
+
+SELECT e.last_name, c.country_name
+FROM employees e JOIN countries c JOIN locations l JOIN departments d
+	ON c.Country_ID = l.Country_id AND d.location_id = l.location_id AND e.department_id = d.department_id;
+	
+	
+	
+	
+	SELECT Hire_date
+	FROM employees;
+	
+	
+Q3.  
+
+
+
+Q4. 
+
+
+	ORDER BY
+a.
+
+SELECT j.Job_Title, COUNT(e.employee_id)
+FROM employees e, jobs j, departments d
+WHERE e.department_id = d.department_id AND e.job_ID = j.job_ID AND d.department_name = 'Accounting' OR 'Shipping'
+GROUP BY Job_Title
+ORDER BY COUNT(e.employee_id) DESC;
+
+b.
+
+SELECT j.Job_Title, COUNT(e.employee_id)
+FROM employees e JOIN jobs j JOIN departments d
+	ON e.department_id = d.department_id AND e.job_ID = j.job_ID 
+WHERE d.department_name = 'Accounting' OR d.department_name = 'Shipping'
+GROUP BY Job_Title
+ORDER BY COUNT(e.employee_id) DESC;
+
+
+
+Q5. 
+
+a.
+
+SELECT e.last_name EMPLOYEE, m.last_name MANAGER, m.salary 'MANAGER Salary'
+FROM employees e, employees m
+WHERE m.employee_id = e.manager_id AND m.Salary > 15000;
+
+b.
+
+SELECT e.last_name EMPLOYEE, m.last_name MANAGER, m.salary 'MANAGER Salary'
+FROM employees e JOIN employees m
+	ON m.employee_id = e.manager_id 
+WHERE m.Salary > 15000;
+
+
+Q3.
+
+SELECT hire_date
+FROM employees;
+a.
+
+SELECT l.city
+FROM locations l, employees e
+WHERE Hire_Date = MONTH(01);
+
+
+
+
+
+b.
+
+SELECT l.city
+FROM locations l JOIN employees e
+
+WHERE e.location_id = l.location_id Hire_Date = MONTH(01);
+
+

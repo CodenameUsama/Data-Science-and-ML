@@ -1,0 +1,571 @@
+Week 6
+
+
+
+
+Q60. Display the names of employees that earn more than Matos.
+See Q54.
+
+Standard syntax
+
+mysql> Select a.last_name "Earn More than Matos" 
+    -> From employees a, employees b
+    -> where a.salary > b.salary AND
+    ->       a.last_name <> 'Matos' AND
+    ->       b.last_name = 'Matos';
++----------------------+
+| Earn More than Matos |
++----------------------+
+| King                 |
+| Kochhar              |
+| Hunold               |
+| Ernst                |
+| Lorentz              |
+| Mourgos              |
+| Rajs                 |
+| Davies               |
+| Zlotkey              |
+| Abel                 |
+| Taylor               |
+| Grant                |
+| Whalen               |
+| Hartstein            |
+| Fay                  |
+| Higgins              |
+| Gietz                |
++----------------------+
+17 rows in set (0.05 sec)
+
+
+Syntax 1999
+
+mysql> Select a.last_name "Earn More than Matos" 
+    -> From employees a CROSS JOIN employees b
+    ->   ON  a.salary > b.salary AND
+    ->       a.last_name <> 'Matos' AND
+    ->       b.last_name = 'Matos';
++----------------------+
+| Earn More than Matos |
++----------------------+
+| King                 |
+| Kochhar              |
+| Hunold               |
+| Ernst                |
+| Lorentz              |
+| Mourgos              |
+| Rajs                 |
+| Davies               |
+| Zlotkey              |
+| Abel                 |
+| Taylor               |
+| Grant                |
+| Whalen               |
+| Hartstein            |
+| Fay                  |
+| Higgins              |
+| Gietz                |
++----------------------+
+17 rows in set (0.05 sec)
+
+mysql> Select a.last_name "Earn More than Matos"
+    -> From employees a CROSS JOIN employees b
+    -> where a.salary > b.salary AND
+    ->       a.last_name <> 'Matos' AND
+    ->       b.last_name = 'Matos';
++----------------------+
+| Earn More than Matos |
++----------------------+
+| King                 |
+| Kochhar              |
+| Hunold               |
+| Ernst                |
+| Lorentz              |
+| Mourgos              |
+| Rajs                 |
+| Davies               |
+| Zlotkey              |
+| Abel                 |
+| Taylor               |
+| Grant                |
+| Whalen               |
+| Hartstein            |
+| Fay                  |
+| Higgins              |
+| Gietz                |
++----------------------+
+17 rows in set (0.02 sec)
+===== ===
+DML - Data Manipuation Language
+
+Insert rows
+Delete rows
+Update rows
+
+---
+Inserting Rows
+
+Q61. Add department 81, Public Affairs at location 1700 to the database. 
+The manager of department 81 is King.
+
+
+mysql> desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| Department_Id   | decimal(4,0) | NO   | PRI | NULL    |       |
+| Department_Name | varchar(30)  | NO   |     | NULL    |       |
+| Manager_Id      | decimal(6,0) | YES  |     | NULL    |       |
+| Location_Id     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.05 sec)
+
+mysql> select employee_id
+    -> from employees
+    -> where last_name = 'King';
++-------------+
+| employee_id |
++-------------+
+|         100 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO Departments(Department_id,Department_name, manager_id,location_id)
+    -> Values(81,'Pubic Affairs',100,1700);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> 
+mysql> 
+mysql> Select *
+    -> From departments;
++---------------+-----------------+------------+-------------+
+| Department_Id | Department_Name | Manager_Id | Location_Id |
++---------------+-----------------+------------+-------------+
+|            10 | Administration  |        200 |        1700 |
+|            20 | Marketing       |        201 |        1800 |
+|            50 | Shipping        |        124 |        1500 |
+|            60 | IT              |        103 |        1400 |
+|            80 | Sales           |        149 |        2500 |
+|            81 | Pubic Affairs   |        100 |        1700 |
+|            90 | Executive       |        100 |        1700 |
+|           110 | Accounting      |        205 |        1700 |
+|           190 | Contracting     |       NULL |        1700 |
++---------------+-----------------+------------+-------------+
+9 rows in set (0.00 sec)
+
+
+Q62. Add department 89, Day Care Services at location 1700 to the database. 
+The manager has not been assigned yet.
+
+
+mysql> INSERT INTO Departments(Department_id,Department_name, manager_id,location_id)
+    -> VALUES(89, 'Day Care Services', null,1700);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> 
+mysql> Select *
+    -> From departments;
++---------------+-------------------+------------+-------------+
+| Department_Id | Department_Name   | Manager_Id | Location_Id |
++---------------+-------------------+------------+-------------+
+|            10 | Administration    |        200 |        1700 |
+|            20 | Marketing         |        201 |        1800 |
+|            50 | Shipping          |        124 |        1500 |
+|            60 | IT                |        103 |        1400 |
+|            80 | Sales             |        149 |        2500 |
+|            81 | Pubic Affairs     |        100 |        1700 |
+|            89 | Day Care Services |       NULL |        1700 |
+|            90 | Executive         |        100 |        1700 |
+|           110 | Accounting        |        205 |        1700 |
+|           190 | Contracting       |       NULL |        1700 |
++---------------+-------------------+------------+-------------+
+10 rows in set (0.00 sec)
+
+
+Q63. Add department 95, Shipping and Handling to the database, location and manager have not been assigned yet.
+
+
+mysql> INSERT INTO Departments
+    -> VALUES(95, 'Shipping and Handling');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+
+
+mysql> INSERT INTO Departments(Department_id,Department_name, manager_id,location_id)
+    -> VALUES(95, 'Shipping and Handling',null,null);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> Select *
+    -> From departments;
++---------------+-----------------------+------------+-------------+
+| Department_Id | Department_Name       | Manager_Id | Location_Id |
++---------------+-----------------------+------------+-------------+
+|            10 | Administration        |        200 |        1700 |
+|            20 | Marketing             |        201 |        1800 |
+|            50 | Shipping              |        124 |        1500 |
+|            60 | IT                    |        103 |        1400 |
+|            80 | Sales                 |        149 |        2500 |
+|            81 | Pubic Affairs         |        100 |        1700 |
+|            89 | Day Care Services     |       NULL |        1700 |
+|            90 | Executive             |        100 |        1700 |
+|            95 | Shipping and Handling |       NULL |        NULL |
+|           110 | Accounting            |        205 |        1700 |
+|           190 | Contracting           |       NULL |        1700 |
++---------------+-----------------------+------------+-------------+
+11 rows in set (0.00 sec)
+
+
+----
+
+Deleting Rows
+
+Q64. Remove the Shipping and Handling department from the database.
+
+
+mysql> 
+mysql> Delete
+    -> From Departments
+    -> where Department_name = 'Shipping and Handling';
+Query OK, 1 row affected (0.08 sec)
+
+mysql> 
+mysql> Select *
+    -> From departments;
++---------------+-------------------+------------+-------------+
+| Department_Id | Department_Name   | Manager_Id | Location_Id |
++---------------+-------------------+------------+-------------+
+|            10 | Administration    |        200 |        1700 |
+|            20 | Marketing         |        201 |        1800 |
+|            50 | Shipping          |        124 |        1500 |
+|            60 | IT                |        103 |        1400 |
+|            80 | Sales             |        149 |        2500 |
+|            81 | Pubic Affairs     |        100 |        1700 |
+|            89 | Day Care Services |       NULL |        1700 |
+|            90 | Executive         |        100 |        1700 |
+|           110 | Accounting        |        205 |        1700 |
+|           190 | Contracting       |       NULL |        1700 |
++---------------+-------------------+------------+-------------+
+10 rows in set (0.00 sec)
+
+
+Q65. Remove all the employees working for the IT department.
+
+
+Delete
+From Employees
+Where department_id = (Select department_id
+                       from departments
+                       where department_name = 'IT');
+
+Q66. Remove from the database all the departments loacted in Seattle.
+
+Delete
+from departments
+where location_id = (Select location_id
+                     from Locations
+                     where city = 'Seattle');
+
+
+---
+Update Rows
+--
+
+Q67. The employee with id 176 will be working for department 60 in thge future. Do the update.
+
+mysql> Select department_id
+    -> from employees
+    -> where employee_id = 176;
++---------------+
+| department_id |
++---------------+
+|            80 |
++---------------+
+1 row in set (0.03 sec)
+
+mysql> 
+mysql> UPDATE Employees
+    -> SET department_id = 60
+    -> where employee_id = 176;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> 
+mysql> Select department_id
+    -> from employees
+    -> where employee_id = 176;
++---------------+
+| department_id |
++---------------+
+|            60 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> Select *
+    -> From departments;
++---------------+-------------------+------------+-------------+
+| Department_Id | Department_Name   | Manager_Id | Location_Id |
++---------------+-------------------+------------+-------------+
+|            10 | Administration    |        200 |        1700 |
+|            20 | Marketing         |        201 |        1800 |
+|            50 | Shipping          |        124 |        1500 |
+|            60 | IT                |        103 |        1400 |
+|            80 | Sales             |        149 |        2500 |
+|            81 | Public Affairs    |        100 |        1700 |
+|            89 | Day Care Services |       NULL |        1700 |
+|            90 | Executive         |        100 |        1700 |
+|           110 | Accounting        |        205 |        1700 |
+|           190 | Contracting       |       NULL |        1700 |
++---------------+-------------------+------------+-------------+
+10 rows in set (0.00 sec)
+
+
+Q68. The department Public Affairs has been renamed Public Services and relocated to location 1800. Do the updates.
+
+mysql> 
+mysql> UPDATE Departments
+    -> SET Department_name = 'Public Services', Location_id = 1800
+    -> where department_name = 'Public Affairs';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+
+mysql> 
+mysql> Select *
+    -> From departments;
++---------------+-------------------+------------+-------------+
+| Department_Id | Department_Name   | Manager_Id | Location_Id |
++---------------+-------------------+------------+-------------+
+|            10 | Administration    |        200 |        1700 |
+|            20 | Marketing         |        201 |        1800 |
+|            50 | Shipping          |        124 |        1500 |
+|            60 | IT                |        103 |        1400 |
+|            80 | Sales             |        149 |        2500 |
+|            81 | Public Affairs    |        100 |        1700 |
+|            89 | Day Care Services |       NULL |        1700 |
+|            90 | Executive         |        100 |        1700 |
+|           110 | Accounting        |        205 |        1700 |
+|           190 | Contracting       |       NULL |        1700 |
++---------------+-------------------+------------+-------------+
+10 rows in set (0.00 sec)
+
+mysql> Select *
+    -> From departments;
++---------------+-------------------+------------+-------------+
+| Department_Id | Department_Name   | Manager_Id | Location_Id |
++---------------+-------------------+------------+-------------+
+|            10 | Administration    |        200 |        1700 |
+|            20 | Marketing         |        201 |        1800 |
+|            50 | Shipping          |        124 |        1500 |
+|            60 | IT                |        103 |        1400 |
+|            80 | Sales             |        149 |        2500 |
+|            81 | Public Services   |        100 |        1800 |
+|            89 | Day Care Services |       NULL |        1700 |
+|            90 | Executive         |        100 |        1700 |
+|           110 | Accounting        |        205 |        1700 |
+|           190 | Contracting       |       NULL |        1700 |
++---------------+-------------------+------------+-------------+
+10 rows in set (0.00 sec)
+
+
+
+
+
+mysql> Select *
+    -> From departments;
++---------------+-------------------+------------+-------------+
+| Department_Id | Department_Name   | Manager_Id | Location_Id |
++---------------+-------------------+------------+-------------+
+|            10 | Administration    |        200 |        1700 |
+|            20 | Marketing         |        201 |        1800 |
+|            50 | Shipping          |        124 |        1500 |
+|            60 | IT                |        103 |        1400 |
+|            80 | Sales             |        149 |        2500 |
+|            81 | Public Services   |        100 |        1800 |
+|            89 | Day Care Services |       NULL |        1700 |
+|            90 | Executive         |        100 |        1700 |
+|           110 | Accounting        |        205 |        1700 |
+|           190 | Contracting       |       NULL |        1700 |
++---------------+-------------------+------------+-------------+
+10 rows in set (0.00 sec)
+
+
+Q69. The Contracting department has a new manager. The name of the manager is King. Do the update.
+
+mysql> 
+mysql> 
+mysql> UPDATE Departments
+    -> SET manager_id = (Select employee_id
+    ->                   From employees
+    ->                   where last_name = 'King')
+    -> Where department_name = 'Contracting';
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> 
+mysql> Select *
+    -> From departments;
++---------------+-------------------+------------+-------------+
+| Department_Id | Department_Name   | Manager_Id | Location_Id |
++---------------+-------------------+------------+-------------+
+|            10 | Administration    |        200 |        1700 |
+|            20 | Marketing         |        201 |        1800 |
+|            50 | Shipping          |        124 |        1500 |
+|            60 | IT                |        103 |        1400 |
+|            80 | Sales             |        149 |        2500 |
+|            81 | Public Services   |        100 |        1800 |
+|            89 | Day Care Services |       NULL |        1700 |
+|            90 | Executive         |        100 |        1700 |
+|           110 | Accounting        |        205 |        1700 |
+|           190 | Contracting       |        100 |        1700 |
++---------------+-------------------+------------+-------------+
+10 rows in set (0.00 sec)
+
+-------------- -- -- - - End Of File ----------
+  
+Running the script to create and design a relationship between Courses, CoursesOffered, Teachers, Students and Registrations.
+
+--- Create and mount the database
+mysql> Create database Sep2019Reg;
+Query OK, 1 row affected (0.06 sec)
+
+mysql> use Sep2019Reg;
+Database changed
+
+---
+Run the script
+---
+
+mysql> Drop Table Registrations;
+ERROR 1051 (42S02): Unknown table 'junereg.registrations'
+mysql> Drop Table CoursesOffered;
+ERROR 1051 (42S02): Unknown table 'junereg.coursesoffered'
+mysql> Drop Table Courses;
+ERROR 1051 (42S02): Unknown table 'junereg.courses'
+mysql> Drop Table Teachers;
+ERROR 1051 (42S02): Unknown table 'junereg.teachers'
+mysql> Drop Table Students;
+ERROR 1051 (42S02): Unknown table 'junereg.students'
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> Create Table Courses
+    ->  (Cid varchar(7) Primary Key,
+    ->   Ctitle varchar(30));
+Query OK, 0 rows affected (0.31 sec)
+
+mysql> 
+mysql> Create Table Teachers
+    ->  (Eid varchar(7) Primary Key,
+    ->   TlastName varchar(30),
+    ->   TfirstName varchar(30),
+    ->   Taddress varchar(50),
+    ->   Temail varchar(50),
+    ->   TcontactNumber varchar(15));
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> 
+mysql> Create Table Students
+    ->  (Sid varchar(7) Primary Key,
+    ->   SlastName varchar(30),
+    ->   SfirstName varchar(30),
+    ->   Saddress varchar(50),
+    ->   Semail varchar(50),
+    ->   ScontactNumber varchar(15));
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> 
+mysql> Create Table CoursesOffered
+    ->  (Cid varchar(7),
+    ->   Csection varchar(5),
+    ->   Cterm varchar(10),
+    ->   CstartTime Time,
+    ->   CstartDate Date,
+    ->   CendDate Date,
+    ->   Clocation varchar(5),
+    ->   Eid varchar(7),
+    ->   Foreign Key (Cid) References Courses(Cid),
+    ->   Foreign Key (Eid) References Teachers(Eid),
+    ->   Constraint CoursesOfferedPK Primary Key(Cid,Csection,Cterm));
+Query OK, 0 rows affected (0.50 sec)
+
+mysql> 
+mysql> Create Table Registrations
+    ->   (Cid varchar(7),
+    ->    Csection varchar(5),
+    ->    Cterm varchar(10),
+    ->    Sid varchar(7),
+    ->    Grade varchar(4),
+    ->    RegDate timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    ->    Foreign Key (Sid) References Students(Sid),
+    ->    Foreign Key (Cid, Csection,Cterm) References CoursesOffered(Cid,Csection,Cterm),
+    ->    Constraint RegistrationsPK Primary Key(Cid,Csection,Cterm,Sid));
+Query OK, 0 rows affected (0.50 sec)
+
+mysql> 
+mysql> Show tables;
++-------------------+
+| Tables_in_Sep2019reg |
++-------------------+
+| courses           |
+| coursesoffered    |
+| registrations     |
+| students          |
+| teachers          |
++-------------------+
+5 rows in set (0.00 sec)
+
+mysql> Desc CoursesOffered;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| Cid        | varchar(7)  | NO   | PRI |         |       |
+| Csection   | varchar(5)  | NO   | PRI |         |       |
+| Cterm      | varchar(10) | NO   | PRI |         |       |
+| CstartTime | time        | YES  |     | NULL    |       |
+| CstartDate | date        | YES  |     | NULL    |       |
+| CendDate   | date        | YES  |     | NULL    |       |
+| Clocation  | varchar(5)  | YES  |     | NULL    |       |
+| Eid        | varchar(7)  | YES  | MUL | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> Desc Teachers;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| Eid            | varchar(7)  | NO   | PRI | NULL    |       |
+| TlastName      | varchar(30) | YES  |     | NULL    |       |
+| TfirstName     | varchar(30) | YES  |     | NULL    |       |
+| Taddress       | varchar(50) | YES  |     | NULL    |       |
+| Temail         | varchar(50) | YES  |     | NULL    |       |
+| TcontactNumber | varchar(15) | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+6 rows in set (0.02 sec)
+
+mysql> Desc Registrations;
++----------+-------------+------+-----+-------------------+-----------------------------+
+| Field    | Type        | Null | Key | Default           | Extra                       |
++----------+-------------+------+-----+-------------------+-----------------------------+
+| Cid      | varchar(7)  | NO   | PRI |                   |                             |
+| Csection | varchar(5)  | NO   | PRI |                   |                             |
+| Cterm    | varchar(10) | NO   | PRI |                   |                             |
+| Sid      | varchar(7)  | NO   | PRI |                   |                             |
+| Grade    | varchar(4)  | YES  |     | NULL              |                             |
+| RegDate  | timestamp   | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++----------+-------------+------+-----+-------------------+-----------------------------+
+6 rows in set (0.02 sec)
+
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> exit;

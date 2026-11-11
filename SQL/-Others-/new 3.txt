@@ -1,0 +1,94 @@
+Drop Table Registrations;
+Drop Table CoursesOffered;
+Drop Table Courses;
+Drop Table Teachers;
+Drop Table Students;
+
+
+Using Registration database
+
+Create a View to display the list of courses assigned to a teacher 
+
+Include teacher's name, course id, location, starting and ending date  
+
+Name the view CoursesAssig
+
+
+CREATE OR REPLACE VIEW CourseTeacher
+AS	(	SELECT t.TlastName, cf.Cid, cf.Clocation, cf.CStartDate, cf.CendDate
+		FROM teachers t, coursesoffered cf
+		WHERE t.Eid = cf.Eid);
+		
+SELECT *
+FROM CourseTeacher;
+
+
+Using Registration database
+
+Create a View to generate a class list from a CEWP215 course Fall2023 term.
+
+Include course number, course title, teacher name, and student id, first and last name.
+
+Name the view ClassList
+
+
+CREATE OR REPLACE VIEW SQLcourse
+AS	(	SELECT c.Cid, c.cTitle, t.Tlastname, CONCAT(s.SfirstName, s.SlastName) 
+		FROM courses c, teachers t, students s, coursesoffered cf, registrations r
+		WHERE c.cid = cf.cid AND cf.eid = t.eid AND r.sid = s.sid AND c.Ctitle = 'CEWP215' AND cf.cterm = 'Fall2023');
+		
+SELECT *
+FROM SQLcourse;
+
+
+
+Create a View to display how many students have registered for each course on term Fall2023.
+
+Include course code and number of students.
+
+Name the view Fall2023Reg
+
+
+CREATE OR REPLACE VIEW Fall2023Reg
+AS	(	SELECT cid, COUNT(sid)
+		FROM registrations 
+		WHERE cterm = 'Fall2023'
+		GROUP BY cid);
+		
+SELECT *
+FROM Fall2023Reg;
+
+
+Some students used early registration for the term Winter2024 -
+
+Write a query to 
+
+Display the student's name, the course id and course title that they registered for as well as the time (hour) that the registration took place.
+
+
+
+SELECT s.SlastName, r.cid, c.ctitle, r.RegDate
+FROM students s, registration r, courses c
+WHERE s.sid = r.sid AND r.cid = c.cid;
+
+
+
+
+
+
+Using Registration database
+
+Create a View to generate a class list from a CEWP215 course Fall2023 term.
+
+Include course number, course title, teacher name, and student id, first and last name.
+
+Name the view ClassList
+
+
+CREATE OR REPLACE VIEW ClassList
+AS	(	SELECT c.Cid, c.cTitle, t.Tlastname, s.sid, CONCAT(s.SfirstName,' ', s.SlastName) 
+		FROM courses c, teachers t, students s, coursesoffered cf, registrations r
+		WHERE r.cid = c.cid AND cf.eid = t.eid AND r.sid = s.sid AND cf.cid = r.cid AND c.Cid = 'CEWP215' AND cf.cterm = 'Fall2023');
+		
+SELECT *
+FROM ClassList;

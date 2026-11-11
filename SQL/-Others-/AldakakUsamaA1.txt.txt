@@ -1,0 +1,81 @@
+Assignement 1 SQL
+
+Q1. How much it was spent in the collection between 2000 and 2003? 
+
+SELECT SUM(CDPrice + VinylPrice)
+FROM music
+WHERE DatePurchased BETWEEN '2000-01-01' AND '2003-01-01';
+
+
+Q2. The price of a vinyl album copy that reached number 1 in both charts, in the UK and in the 
+US have increased 80% in value.
+Create a query to display Artist Name, album title, date purchased, the purchased price paid and 
+the new price value
+
+SELECT Artist 'Artist Name', Title 'Album', DatePurchased 'Date Purchased', VinylPrice 'Price',  FORMAT(VinylPrice*1.80, 2) 'New Price'
+FROM music
+WHERE UKChartPos = 1 AND USChartPos = 1;
+
+
+Q3. Create a query to display the name of the artist and the title of the album for which we have 
+CD format only
+
+SELECT Artist 'Artist Name', Title 'Album'
+FROM music
+WHERE Vinyl IS NULL AND CD IS NOT NULL;
+
+
+Q4. Create a query to display the name of the albums that were number 1 in the charts in the Uk 
+but not in the US
+
+SELECT Title 'Album'
+FROM music
+WHERE UKChartPos = 1 AND USChartPos != 1;
+
+
+Q5. How many albums reached number 5 or higher in the charts in the UK and the US?
+
+SELECT COUNT(Title) 'Num. of Albums WHERE position <=5'
+FROM music
+WHERE UKChartPos <= 5 AND USChartPos <= 5;
+
+
+Q6. Display the album name and artist of music gender Pop that were purchased in 1985.
+
+SELECT Artist 'Artist Name', Title 'Album'
+FROM music
+WHERE MusicType = 'Pop' AND DatePurchased BETWEEN '1985-01-01' AND '1985-12-31';
+
+
+Q7. Display the music gender for which we have more than 8 vinyl copies.
+
+SELECT MusicType 'Music Gender'
+FROM music
+WHERE Vinyl IS NOT NULL 
+GROUP BY MusicType
+HAVING COUNT(Vinyl) > 7;
+
+
+Q8. Create a query to display the albums in the collection of music gender Reggae that we have 
+vinyl copy only.
+Display artist name, title and purchased price in one column format named "Album Information"
+
+SELECT CONCAT('-Artist:', Artist, ' -Album:', Title, ' -Price:', VinylPrice) "Album Information"
+FROM music
+WHERE MusicType = 'Reggae' AND Vinyl IS NOT NULL AND CD IS NULL;
+
+
+Q9. Create a query to count how many CDs and Vinyl copies there are in Jazz. Display music 
+gender and the corresponding total.
+
+SELECT MusicType 'Gender', COUNT(Vinyl IS NOT NULL) '# Vinyl copies', COUNT(CD IS NOT NULL) '# CD copies'
+FROM music
+WHERE MusicType = 'Jazz'
+GROUP BY MusicType;
+
+
+Q10. Display the artist’s name and album of rock music gender that there is a Vinyl copy only.
+
+SELECT Artist, Title 
+FROM music
+WHERE MusicType = 'Rock' AND Vinyl IS NOT NULL AND CD IS NULL;

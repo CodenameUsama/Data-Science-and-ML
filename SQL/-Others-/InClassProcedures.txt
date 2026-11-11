@@ -1,0 +1,238 @@
+About Procedures
+
+
+Ex1. Create a procedure to add two numbers
+
+
+Drop Procedure CalculateSum;
+Delimiter //
+Create Procedure CalculateSum()
+BEGIN 
+   Declare Result1 INT default 0;
+   SET Result1 = 45 + 35;
+   Select Result1 as Sum;
+END//
+
+Delimiter ;
+call CalculateSum();
+
+
+
+Ex2. Add two numbers - now with any given numbers
+
+Drop Procedure CalculateSum2;
+Delimiter //
+Create procedure CalculateSum2(IN Numb1 INT,IN Numb2 INT)
+BEGIN
+    DECLARE result1 INT default 0;
+	SET result1 = numb1 + numb2;
+	Select result1 AS Sum;
+END//
+
+Delimiter ;
+call CalculateSum2();
+
+
+
+Ex3. Evaluate any two given numbers to see which one is the largest number.
+
+PseudoCode 
+
+Input number 1 and number 2 
+Check if Number 1 is GT Number 2 
+   If true Then 
+     Store Number 1 into Largest Number 
+	 Set a message "Number 1 is the the largest"
+	
+	Otherwise If Number1 is less than Number 2 
+	   If true Then
+	    Store Number 2 into Largest number
+		Set a message "Number 2 is the largest"
+		
+	    Otherwise 
+		 Set a message "Numbers are equal"
+		 Store Null Value into Largest Number 
+
+Display Largest Number and Message 
+
+IF Statement
+
+-- General Notation ---
+
+IF Cond Then
+   {What will be executed if the cond is TRUE}
+  ELSE 
+    {What will be executed if the cond is NOT TRUE}
+END IF 
+:::
+:::
+--Nested IF 
+
+IF Cond Then
+   {What will be executed if the cond is TRUE}
+  ELSE 
+    IF Cond2 THEN 
+        {What will be executed if the cond2 is TRUE}
+      ELSE 		
+         {What will be executed if the cond2 is NOT TRUE}
+	END IF 
+END IF 
+
+Drop procedure CompareTwo();
+Delimiter //
+CREATE PROCEDURE CompareTwo(IN Numb1 INT, IN Numb2 INT)
+BEGIN 
+    DECLARE BigNumb INT default 0;	
+	DECLARE Messa varchar(20) default null;
+	IF numb1 > numb2 THEN
+	   SET BigNumb = numb1;
+	   SET Messa = 'Number One is bigger';
+	  ELSE 
+        IF numb1 < numb2 THEN
+           SET BigNumb = numb2;
+		   SET Messa = 'Number two is bigger';
+		 ELSE 
+		    SET Messa = 'Numbers are equal';
+			SET bigNumb = null;
+		END IF; 
+	END IF;
+	SELECT BigNumb as Numb, Messa as Message;
+END// 
+
+
+Delimiter ;
+
+
+Ex4. Show the profit from any given order number.
+
+DROP Procedure PView2;
+Delimiter //
+CREATE PROCEDURE PView2(IN ONumb varchar(6), OUT TotalP decimal(8.2)) 
+BEGIN
+    Select SUM(Profit) INTO TotalP
+	From Profits
+	Where OrderNO = ONumb;
+END//
+
+DELIMITER ;
+mysql> Call PView2('020002',@Totalp);
+
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+mysql> Select @Totalp;
++---------+
+| @Totalp |
++---------+
+|    2065 |
++---------+
+1 row in set (0.00 sec)
+
+Ex5. Change the department number where an employee works.
+
+Drop Procedure ChangeWhereEMPWorks;
+Delimiter //
+CREATE PROCEDURE ChangeWhereEMPWorks(IN IdEmp INT, IN DepId INT)
+BEGIN
+    DECLARE Messa VARCHAR(20) default null;
+	SET @EFlag = Null;
+	SET @EFlag = (Select department_id 
+	              From employees 
+				  Where employee_id = IdEmp);
+	IF @EFlag IS NULL THEN 
+	    SET Messa = '*** Id Not Found ***';
+	  ELSE 
+	    UPDATE EMPLOYEES
+		SET department_id = DepId 
+		Where employee_id = IdEmp;
+		SET Messa = '** Update Done ***';
+	END IF;
+	
+	Select Messa as Message;
+END//
+
+ call ChangeWhereEMPWorks(176,110);
+	
+
+Task to do at home:
+
+1. Create a View to include Employee id, department name, city, salary and a 20% salary increase 
+to employees working in Seattle.
+2. Write a query to display from the View (created in step 1) Employee id and salary Increase.
+
+3. Create a procedure to multiply any two given numbers 
+4. Create a procedure to divide any two given numbers.
+      - You must take care of division by zero.
+
+---------------- End of file ----------------- End of File ----------------------------------- 	  
+  
+  
+DROP PROCEDURE division;
+DELIMITER //
+
+CREATE PROCEDURE division(IN num1 INT, IN num2 INT)
+BEGIN
+	DECLARE result1 INT default 0;
+	IF num2 = 0 THEN
+		SELECT result1 AS '**CANNOT DIVIDE BY 0**';
+	ELSE 
+		SET result1 = num1 / num2;
+	SELECT result1 as 'div';
+	END IF;
+END //
+
+DELIMITER ;
+CALL division(10,0);
+	
+
+
+Drop Procedure CalculateSum;
+Delimiter //
+Create Procedure CalculateSum()
+BEGIN 
+   Declare Result1 INT default 0;
+   SET Result1 = 45 + 35;
+   Select Result1 as Sum;
+END//
+
+Delimiter ;
+call CalculateSum();
+
+
+
+DROP Procedure multiply;
+
+DELIMITER //
+
+CREATE PROCEDURE multiply(IN n1 INT, IN n2 INT)
+BEGIN
+	DECLARE Result1 INT default 0;
+	SET Result1 = n1*n2;
+	SELECT Result1 as 'MUL';
+END//
+
+DELIMITER ;
+CALL multiply(2,2);
+
+
+
+
+
+
+
+DROP PROCEDURE mul;
+
+DELIMITER //
+
+CREATE PROCEDURE mul(IN n1 INT, IN n2 INT)
+BEGIN
+	DECLARE r INT default 0;
+	SET r = n1*n2;
+	IF n1 = 0 OR n2 = 0 THEN
+		SELECT r AS '**0 rlly?**';
+	ELSE
+		SELECT r AS multiplication;
+	END IF;
+END //
+
+DELIMITER ;
+CALL mul(5,5);

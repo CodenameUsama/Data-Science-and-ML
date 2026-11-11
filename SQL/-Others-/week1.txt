@@ -1,0 +1,423 @@
+Week 1 ---- 
+
+List of commands------------------------------------------------------
+
+To create a database
+
+mysql>Create database hr;
+
+To Mount a database
+
+mysql>Use hr;
+
+-------------------------------------------------------------------------
+Now run the script to create and populate the objects in the database
+
+- Open the script [text file from course website]
+- select [block] all the lines in the script
+- select Edit
+- select Copy
+
+Point the mouse [focus] on the MySQL command line
+
+mysql>
+
+- Right click the mouse
+- the paste operation will take place and the execution of the script will begin
+
+------------------------------------------
+
+To display the table objects created
+
+
+
+mysql> show tables;
++--------------+
+| Tables_in_hr |
++--------------+
+| countries    |
+| departments  |
+| employees    |
+| job_grades   |
+| job_history  |
+| jobs         |
+| locations    |
+| regions      |
++--------------+
+8 rows in set (0.33 sec)
+
+To display the table objects structure
+
+mysql> describe countries;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| Country_Id   | char(2)      | NO   | PRI | NULL    |       |
+| Country_Name | varchar(40)  | YES  |     | NULL    |       |
+| Region_Id    | decimal(2,0) | YES  | MUL | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+3 rows in set (0.39 sec)
+
+mysql> describe departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| Department_Id   | decimal(4,0) | NO   | PRI | NULL    |       |
+| Department_Name | varchar(30)  | NO   |     | NULL    |       |
+| Manager_Id      | decimal(6,0) | YES  |     | NULL    |       |
+| Location_Id     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> describe employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| Employee_id    | decimal(6,0) | NO   | PRI | NULL    |       |
+| First_Name     | varchar(20)  | YES  |     | NULL    |       |
+| Last_Name      | varchar(25)  | NO   |     | NULL    |       |
+| Email          | varchar(20)  | YES  |     | NULL    |       |
+| Phone_Number   | varchar(20)  | YES  |     | NULL    |       |
+| Hire_Date      | date         | NO   |     | NULL    |       |
+| Job_Id         | varchar(10)  | YES  |     | NULL    |       |
+| Salary         | decimal(8,2) | YES  |     | NULL    |       |
+| Commission_Pct | decimal(2,2) | YES  |     | NULL    |       |
+| Manager_Id     | decimal(6,0) | YES  |     | NULL    |       |
+| Department_Id  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.01 sec)
+
+
+
+Q1. Display all the information about countries.
+
+
+mysql> select *
+    -> from countries;
++------------+--------------------------+-----------+
+| Country_Id | Country_Name             | Region_Id |
++------------+--------------------------+-----------+
+| CA         | Canada                   |         2 |
+| DE         | Germany                  |         1 |
+| UK         | United Kingdom           |         1 |
+| US         | United States of America |         2 |
++------------+--------------------------+-----------+
+4 rows in set (0.06 sec)
+
+
+Q2. Display only the country names.
+
+mysql> select country_name 
+    -> from countries;
++--------------------------+
+| country_name             |
++--------------------------+
+| Canada                   |
+| Germany                  |
+| United Kingdom           |
+| United States of America |
++--------------------------+
+4 rows in set (0.00 sec)
+
+Q2a. Display only the country names using column alias
+
+mysql> select country_name Country
+    -> from countries;
++--------------------------+
+| Country                  |
++--------------------------+
+| Canada                   |
+| Germany                  |
+| United Kingdom           |
+| United States of America |
++--------------------------+
+4 rows in set (0.00 sec)
+
+mysql> show tables;
++--------------+
+| Tables_in_hr |
++--------------+
+| countries    |
+| departments  |
+| employees    |
+| job_grades   |
+| job_history  |
+| jobs         |
+| locations    |
+| regions      |
++--------------+
+8 rows in set (0.00 sec)
+
+
+Q3. Display first name and last name of every employee working in the company.
+
+
+mysql> describe employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| Employee_id    | decimal(6,0) | NO   | PRI | NULL    |       |
+| First_Name     | varchar(20)  | YES  |     | NULL    |       |
+| Last_Name      | varchar(25)  | NO   |     | NULL    |       |
+| Email          | varchar(20)  | YES  |     | NULL    |       |
+| Phone_Number   | varchar(20)  | YES  |     | NULL    |       |
+| Hire_Date      | date         | NO   |     | NULL    |       |
+| Job_Id         | varchar(10)  | YES  |     | NULL    |       |
+| Salary         | decimal(8,2) | YES  |     | NULL    |       |
+| Commission_Pct | decimal(2,2) | YES  |     | NULL    |       |
+| Manager_Id     | decimal(6,0) | YES  |     | NULL    |       |
+| Department_Id  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.03 sec)
+
+mysql> select last_name, first_name
+    -> from employees;
++-----------+------------+
+| last_name | first_name |
++-----------+------------+
+| King      | Steven     |
+| Kochhar   | Neena      |
+| Hunold    | Alexander  |
+| Ernst     | Bruce      |
+| Lorentz   | Diana      |
+| Mourgos   | Kevin      |
+| Rajs      | Trenna     |
+| Davies    | Curtis     |
+| Matos     | Randall    |
+| Vargas    | Peter      |
+| Zlotkey   | Eleni      |
+| Abel      | Ellen      |
+| Taylor    | Jonathon   |
+| Grant     | Kimberely  |
+| Whalen    | Jennifer   |
+| Hartstein | Michael    |
+| Fay       | Pat        |
+| Higgins   | Shelley    |
+| Gietz     | William    |
++-----------+------------+
+19 rows in set (0.01 sec)
+
+Q3. Display first name and last name of every employee working in the company using column alias
+
+
+mysql> select last_name Last, first_name First
+    -> from employees;
++-----------+-----------+
+| Last      | First     |
++-----------+-----------+
+| King      | Steven    |
+| Kochhar   | Neena     |
+| Hunold    | Alexander |
+| Ernst     | Bruce     |
+| Lorentz   | Diana     |
+| Mourgos   | Kevin     |
+| Rajs      | Trenna    |
+| Davies    | Curtis    |
+| Matos     | Randall   |
+| Vargas    | Peter     |
+| Zlotkey   | Eleni     |
+| Abel      | Ellen     |
+| Taylor    | Jonathon  |
+| Grant     | Kimberely |
+| Whalen    | Jennifer  |
+| Hartstein | Michael   |
+| Fay       | Pat       |
+| Higgins   | Shelley   |
+| Gietz     | William   |
++-----------+-----------+
+19 rows in set (0.00 sec)
+
+
+Q4. Same as Q3 but now add the corresponding salary of each employee.
+
+
+mysql> Select last_name Last, first_name First, Salary
+    -> from employees;
++-----------+-----------+----------+
+| Last      | First     | Salary   |
++-----------+-----------+----------+
+| King      | Steven    | 24000.00 |
+| Kochhar   | Neena     | 17000.00 |
+| Hunold    | Alexander |  9000.00 |
+| Ernst     | Bruce     |  6000.00 |
+| Lorentz   | Diana     |  4200.00 |
+| Mourgos   | Kevin     |  5800.00 |
+| Rajs      | Trenna    |  3500.00 |
+| Davies    | Curtis    |  3100.00 |
+| Matos     | Randall   |  2600.00 |
+| Vargas    | Peter     |  2500.00 |
+| Zlotkey   | Eleni     | 10500.00 |
+| Abel      | Ellen     | 11000.00 |
+| Taylor    | Jonathon  |  8600.00 |
+| Grant     | Kimberely |  7000.00 |
+| Whalen    | Jennifer  |  4400.00 |
+| Hartstein | Michael   | 13000.00 |
+| Fay       | Pat       |  6000.00 |
+| Higgins   | Shelley   | 12000.00 |
+| Gietz     | William   |  8300.00 |
++-----------+-----------+----------+
+19 rows in set (0.00 sec)
+
+
+Q5. Same as Q4 but now display the employee names in one column format under the title Employee Names.
+
+
+mysql> Select Concat(Last_name, " ",FIRST_NAME) "Employee Names", Salary
+    -> from employees;
++-------------------+----------+
+| Employee Names    | Salary   |
++-------------------+----------+
+| King Steven       | 24000.00 |
+| Kochhar Neena     | 17000.00 |
+| Hunold Alexander  |  9000.00 |
+| Ernst Bruce       |  6000.00 |
+| Lorentz Diana     |  4200.00 |
+| Mourgos Kevin     |  5800.00 |
+| Rajs Trenna       |  3500.00 |
+| Davies Curtis     |  3100.00 |
+| Matos Randall     |  2600.00 |
+| Vargas Peter      |  2500.00 |
+| Zlotkey Eleni     | 10500.00 |
+| Abel Ellen        | 11000.00 |
+| Taylor Jonathon   |  8600.00 |
+| Grant Kimberely   |  7000.00 |
+| Whalen Jennifer   |  4400.00 |
+| Hartstein Michael | 13000.00 |
+| Fay Pat           |  6000.00 |
+| Higgins Shelley   | 12000.00 |
+| Gietz William     |  8300.00 |
++-------------------+----------+
+19 rows in set (0.03 sec)
+
+
+Q6. Same as Q5 but now add Salary onto the one column display.
+
+
+mysql> Select Concat(last_name,"  ",first_name,"  ",Salary) "Employee Information"
+    -> from employees;
++------------------------------+
+| Employee Information         |
++------------------------------+
+| King  Steven  24000.00       |
+| Kochhar  Neena  17000.00     |
+| Hunold  Alexander  9000.00   |
+| Ernst  Bruce  6000.00        |
+| Lorentz  Diana  4200.00      |
+| Mourgos  Kevin  5800.00      |
+| Rajs  Trenna  3500.00        |
+| Davies  Curtis  3100.00      |
+| Matos  Randall  2600.00      |
+| Vargas  Peter  2500.00       |
+| Zlotkey  Eleni  10500.00     |
+| Abel  Ellen  11000.00        |
+| Taylor  Jonathon  8600.00    |
+| Grant  Kimberely  7000.00    |
+| Whalen  Jennifer  4400.00    |
+| Hartstein  Michael  13000.00 |
+| Fay  Pat  6000.00            |
+| Higgins  Shelley  12000.00   |
+| Gietz  William  8300.00      |
++------------------------------+
+19 rows in set (0.00 sec)
+
+
+Q7. Display the region id where Canada is located.
+
+
+mysql> describe countries;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| Country_Id   | char(2)      | NO   | PRI | NULL    |       |
+| Country_Name | varchar(40)  | YES  |     | NULL    |       |
+| Region_Id    | decimal(2,0) | YES  | MUL | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> 
+mysql> 
+mysql> Select Region_id Region
+    -> from countries
+    -> where Country_name = 'Canada';
++--------+
+| Region |
++--------+
+|      2 |
++--------+
+1 row in set (0.04 sec)
+
+
+-- List of possible errors that you will encounter
+
+E1---
+
+mysql> Select Region_i Region
+    -> from countries
+    -> where country_name = 'Canada’;
+ERROR 1054 (42S22): Unknown column 'Region_i' in 'field list'
+
+-- fixed
+
+mysql> Select Region_id Region
+    -> from countries
+    -> where Country_name = 'Canada';
++--------+
+| Region |
++--------+
+|      2 |
++--------+
+1 row in set (0.00 sec)
+
+E2 ---
+
+mysql> Select Region_id Region
+    -> from country
+    -> where Country_name = 'Canada';
+ERROR 1146 (42S02): Table 'hr.country' doesn't exist
+
+-- Fixed
+mysql> Select Region_id Region
+    -> from countries
+    -> where Country_name = 'Canada';
+
+
+E3 ---
+
+mysql> Selet Region_id Region
+    -> from countries
+    -> where Country_name = 'Canada';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Selet Region_id Region
+from countries
+where Country_name = 'Canada'' at line 1
+
+-- Fixed
+
+mysql> Select Region_id Region
+    -> from countries
+    -> where Country_name = 'Canada';
+
+E4 ---
+
+mysql> Select Region_id Region
+    -> from countries
+    -> where Country_name = 'Canada'
+    -> 
+    -> 
+    -> ;
++--------+
+| Region |
++--------+
+|      2 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> Select Region_id Region
+    -> from countries
+    -> where Country_name = 'Canada;
+    '> 
+    '> 
+    '> ';
+Empty set (0.00 sec)
+
+mysql> exit;
+------------------------------- End of file ------------------------------------------------------------------------------------

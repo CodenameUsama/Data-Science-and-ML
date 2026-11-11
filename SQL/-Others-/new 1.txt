@@ -1,0 +1,96 @@
+NEW TABLES
+
+Drop Table Registrations;
+Drop Table CoursesOffered;
+Drop Table Courses;
+Drop Table Teachers;
+Drop Table Students;
+
+
+
+
+
+
+
+
+PRCEDURES
+
+DROP PROCEDURE division;
+DELIMITER //
+
+CREATE PROCEDURE division(IN num1 INT, IN num2 INT)
+BEGIN
+	DECLARE result1 INT default 0;
+	IF num2 = 0 THEN
+		SELECT result1 AS '**CANNOT DIVIDE BY 0**';
+	ELSE 
+		SET result1 = num1 / num2;
+	SELECT result1 as 'div';
+	END IF;
+END //
+
+DELIMITER ;
+CALL division(10,5);
+
+
+
+
+
+
+
+
+
+
+VIEWS
+
+CREATE OR REPLACE VIEW SalesDetails
+AS	(SELECT i.PartNo, i.Descript, i.UnitCost, i.SalePrice, t.OrderNo, t.Qty
+	 FROM inventory i, items t
+	 WHERE i.PartNo = t.PartNo);
+	 
+SELECT *
+FROM SalesDetails;
+
+
+
+
+
+
+
+DML - Data Manipuation Language
+
+Insert rows
+Delete rows
+Update rows
+
+
+
+
+
+
+
+
+Q55.Display the last name, salary, and job_id of all employees that earn less than any employees with job_id 'SA_REP'.
+
+SELECT last_name, salary, job_id 
+FROM employees
+WHERE salary < ANY (SELECT Salary
+				FROM employees
+				WHERE job_id = 'SA_REP')
+AND job_id != 'SA_REP' ;
+
+
+ 
+--> The last line is Very important, if not there, the result will includ people from the SA_rep job_id we're comparing it to
+
+--> ANY is used when comparing (=, <, > , !=, <=,etc.)  Where IN cannot be used with comparaison operator
+
+
+
+Display the names of employees that are managers.
+
+SELECT last_name 'Manger Name'
+FROM employees 
+WHERE employee_id IN 	(SELECT distinct manager_id 
+						FROM employees 
+						WHERE manager_id is not null);

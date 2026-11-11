@@ -1,0 +1,156 @@
+About Views 
+
+
+Using Tables from HR database
+
+
+Ex 1.a Create a View to include only the employees working for department 60 
+include employee id, last name, first name, slary and date hired.
+
+
+Create OR Replace View Dept60
+  AS select employee_id, last_name, First_name, salary, Hire_date
+   from employees
+   where department_id = 60;
+   
+Ex 1.b Same as but now include department name.
+   
+   
+ Create OR Replace View Dept60WithName
+  AS select e.employee_id, e.last_name, e.First_name, e.salary, e.Hire_date, d.department_name
+   from employees e, departments d  
+   where e.department_id = d.department_id AND e.department_id = 60;
+
+
+====
+   
+Ex 2. Create a View to to show a employee list that includes only the employee id, last name, first name, email address.
+
+
+CREATE OR REPLACE VIEW EMPLIST
+   AS Select employee_id ID, Last_name Last, First_name First, email 
+      From Employees;
+
+	  
+Run a query on the view 
+
+Select * 
+from emplist;
+
+Select email, Last
+from emplist
+where last = 'King';   
+
+=========
+
+
+Ex3.   Create a  view to include only the employees working in the Executive and Accounting  departments 
+include employee last name, first name, email, department name 
+ 
+     
+  Create OR replace VIEW ExecAccDeps
+  AS select e.last_name LName, e.first_name Fname, e.email email, d.department_name Department
+     from employees e JOIN departments d 
+         ON e.department_id = d.department_id 
+     Where d.department_name IN ('Executive', 'Accounting'); 
+
+
+mysql> Select *
+    -> from ExecAccDeps;
+
+==========
+	 
+Ex4. Create a view to create an employee list that includes employee last name, first name, department name, city and country name where the department is located.	 
+
+Create or Replace VIEW EmpDepCountry
+  AS Select e.last_name LName, e.first_name Fname,d.department_name Department, l.city City, c.country_name Country
+     From employees e, departments d, locations l, countries c
+	 where e.department_id = d.department_id AND 
+	       d.location_id = l.location_id AND
+		   l.country_id = c.country_id;
+		   
+Select * 
+from EmpDepCountry;
+
+Use the View to find the employees that work in Canada.
+
+Select LName, fname
+from EmpDepCountry
+where country = 'Canada';
+
+=========
+
+Ex 5. Create a VIEW to display the current employees that had previous jobs in the company. Include Last name, Job id, Start date and end date on the previous jobs.
+
+
+Based on two tables - Employees, Job_history 
+
+
+Create OR Replace View OldJobs 
+AS Select e.last_name Name,j.job_id OLDJOB,j.start_date Started, j.end_date Ended, e.job_id Current
+   FRom employees e, Job_history j 
+   Where e.employee_id = j.employee_id;
+
+Select * 
+from OldJobs;
+
+
+==========================
+==========================
+==========================
+
+
+Using Tables from assignment # 2 
+
+Ex6. Create a View to include Sales Details that includes part number, Part Description, Unit cost
+Sale Price, Order Number, Quantity.
+
+
+
+Create View SalesDetails
+ AS (Select i.PartNo, i.Descript, i.UnitCost, i.SalePrice, it.OrderNo, it.Qty
+ From inventory i, items it
+ where i.partNo = it.partNo);
+ 
+ mysql> Select *
+    -> from SalesDetails;
+
+=========
+
+Ex7. Create a View to include the total per order 
+Include Order Number, sale date, sale price, quantity, and total 
+ 
+ Create View TotalPerOrder
+ AS (Select s.OrderNo, S.SaleDate, sd.salePrice, sd.qty,  sd.salePrice * sd.qty "Order Total" 
+     From Sales s, SalesDetails sd
+	 Where s.OrderNO = sd.OrderNO);
+	 
+	mysql> Select *
+    -> from TotalPerOrder; 
+	
+==========
+
+Ex8. Create a view that includes profits detail
+Include Part number, Part Description, Unit Cost, Sales Price, Order Number, Quantity, 
+Cost total, Sale total per item.
+
+Create View ProfitDetails
+  AS (Select i.PartNo, i.Descript, i.UnitCost, i.SalePrice, it.OrderNo, it.Qty, it.Qty * i.UnitCost Cost, i.SalePrice * it.Qty Sale
+ From inventory i, items it
+ where i.partNo = it.partNo);
+ 
+mysql> Select *
+    -> from ProfitDetails; 
+ 
+Ex9. Create a view to include profits per order.
+
+ Create OR Replace view Profits
+ AS (Select Pd.OrderNO OrderNo, pd.Qty * pd.UnitCost Cost, pd.SalePrice * pd.Qty Sale, Sale - Cost Profit
+     From ProfitDetails Pd
+	 );
+	 
+mysql> select *
+    -> From profits;	 
+	 
+==================== End of file ===================================End of file ==================
+

@@ -1,0 +1,73 @@
+Tables, Views, Forms, Reports, Index, Procdure. Sequence, Users
+
+Metadata
+
+
+Other version of SQL:
+
+- Oracle
+- MySql
+- Ms-Accesss
+- MS-Sql-Server
+
+
+Users:
+- DBA
+- Programmers
+- Sophisticated
+
+
+Every code has to have ; 
+
+
+Commads:
+
+- Select
+- From
+- Where
+
+- Concat = put multiple colums in 1 colum 
+	ex : 
+   Select Concat(first_name,'  ', last_name) ' Employee Info'
+   from employees;
+
+desc Command:
+
+will show the table named
+
+ex: desc countries;
+
+
+Select Command:
+
+ex:  Select country_name Country
+       From countries;
+- Select {colum name} {desired colum displayed name}
+   From {table name}
+
+Condition Where:
+
+ex: 
+Select region_id  Region, country_name Country 
+From countries
+Where country_name = 'canada';
+
+Relational Operator:
+=
+<>
+>
+<
+>=
+<=
+
+
+where line has to be after from line?
+- Yes, you have to respct order :
+
+Select
+From
+Where;
+
+
+string in '' is case sensitive?
+-No, the string 'canada' or 'Canada' will return the Canada colum
